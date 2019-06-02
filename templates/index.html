@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爬虫页面</title>
+
+</head>
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<body>
+<br>
+<div class="container">
+    <form>
+        <input id="uri" class="form-control form-control-sm" type="text" placeholder="输入uri">
+        <br>
+        <p class="alert alert-info" role="alert">
+            注意：<br>
+            &emsp;1.默认下载至当前目录<br>
+            &emsp;2.现只支持以下网址：<br>
+            &emsp;&emsp; * http://www.collectui.com/
+            &emsp;&emsp; * https://dribbble.com/
+        </p>
+        <br>
+        <button type="button" class="btn btn-primary" onclick="crawler()" id="btn-crawler">下载</button>
+
+        <div class="alert alert-info" id="alert-crawler"role="alert" style="display:none">
+           正在下载...
+        </div>
+    </form>
+</div>
+</body>
+<script src="assets/js/jquery-3.4.1.min.js"></script>
+<script>
+    $("#alert-crawler").hide();
+    function crawler() {
+        let uri=$("#uri").val();
+        console.log(uri);
+        $("#btn-crawler").attr("disabled","true");
+        $("#alert-crawler").show();
+        $.get("crawler?uri=" + uri,function(data,status){
+            $("#btn-crawler").removeAttr("disabled");
+            $("#alert-crawler").hide();
+        });
+    }
+</script>
+</html>
