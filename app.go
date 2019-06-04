@@ -3,22 +3,30 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"iamwyc/crawler/crawler"
+	"github.com/iamwyc/crawler/crawler"
+	"github.com/iamwyc/crawler/global"
 	"net/http"
 )
 
 func main() {
 	gin.SetMode(gin.DebugMode)
 	router := gin.Default()
-	router.StaticFS("/assets", http.Dir("assets"))
-	router.LoadHTMLGlob("templates/*")
 	router.GET("/", index)
+	router.GET("/assets/css/bootstrap.min.css", bootstrap)
+	router.GET("/assets/js/jquery-3.4.1.min.js", jq)
 	router.GET("/crawler", crawl)
 	router.Run()
 }
 
 func index(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", nil)
+	c.Data(http.StatusOK, "text/html", global.IndexHTML)
+}
+
+func bootstrap(c *gin.Context) {
+	c.Data(http.StatusOK, "text/css", global.BootstrapCSS)
+}
+func jq(c *gin.Context) {
+	c.Data(http.StatusOK, "application/x-javascript", global.JqJS)
 }
 
 func crawl(c *gin.Context) {

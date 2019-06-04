@@ -30,7 +30,7 @@ func downloadDribbble(uri string) (err error) {
 
 	for {
 		finishUri := <-ch
-		fmt.Printf("已下载(%d/%d):%v \n", now, len(uris), finishUri)
+		fmt.Printf("已下载(%d/%d):%v \n", now + 1, len(uris), finishUri)
 		now++
 		if now == len(uris) {
 			break
@@ -151,11 +151,20 @@ func downloadDribbbleResource(url string, dir string, name string, header map[st
 	} else {
 		prefix = string(url[:prefixInde+1])
 		suffix = string(url[suffixInde:])
+
 		if strings.Contains(suffix, "mp4") {
-			index = 1;
-			uri = url;
+			index = 1
+			uri = url
+		} else if strings.Contains(suffix, "gif") {
+			index = 1
+			gifIndexTime := strings.LastIndex(url, "_1x")
+			if gifIndexTime > (len(url) - 8) {
+				uri = string(url[:gifIndexTime]) + suffix
+			} else {
+				uri = url
+			}
 		} else {
-			uri = prefix + strconv.Itoa(4) + "x" + suffix;
+			uri = prefix + strconv.Itoa(4) + "x" + suffix
 		}
 	}
 	for ; index > 0; index = index / 2 {
